@@ -3,8 +3,11 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("""Rango says hey there world!
-                           <a href='/rango/about'>About</a>""")
+    # dict that passed to template engine as its context
+    context_dict = {'boldmessage': "I am bold font  from the context"}
+
+    # render the response
+    return render(request, 'rango/index.html', context_dict)
 
 
 def about(request):
