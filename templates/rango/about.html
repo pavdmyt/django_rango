@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+  
+  <body>
+
+    <h2 style="font-family:verdana">Rango About page</h2>
+
+    <p title="Tango With Django!" style="font-family:verdana">I'm working on
+    <a href="http://www.tangowithdjango.com/book17/">this</a> tutorial.<br>
+    It shows how to design a web application called <i>Rango</i>.
+    </p>
+
+    <p style="font-family:verdana"><b>Design Brief</b></p>
+    <img src={% static "images/twd200x200.jpg" %} alt="pic" style="width:200px;height:200px">
+
+    <p style="font-family:verdana">
+    Your client would like you to create a website called Rango that lets users browse through user-defined categories to access various web pages. In Spanish, the word rango is used to mean “<i>a league ranked by quality</i>” or “<i>a position in a social hierarchy</i>” (see
+    <a href="https://www.vocabulary.com/dictionary/es/rango">https://www.vocabulary.com/dictionary/es/rango</a>).
+    </p>
+
+    <ul style="font-family:verdana">
+      <li>For the <i>main page</i> of the site, they would like visitors to be able to see:
+      </li>
+        <ul>
+          <li>the 5 most viewed pages;</li>
+          
+          <li>the five most rango’ed categories; and</li>
+          
+          <li>some way for visitors to browse or search through categories.</li>
+        </ul>
+    </ul>
+
+    <ul style="font-family:verdana">
+      <li>When a user views a <i>category page</i>, they would like it to display:</li>
+        <ul>
+          <li>the category name, the number of visits, the number of likes;</li>
+          
+          <li>along with the list of associated pages in that category (showing the page’s title and linking to its url); and.
+          </li>
+      
+          <li>some search functionality (via Bing’s Search API) to find other pages that can be linked to this category.
+          </li>
+        </ul>
+    </ul>
+
+    <ul style="font-family:verdana">
+      <li>For a particular category, the client would like the name of the category to be recorded, the number of times each category page has been visited, and how many users have clicked a “like” button (i.e. the page gets rango’ed, and voted up the social hierarchy).
+      </li>
+      
+      <li>Each category should be accessible via a readable URL - for example, <samp>/rango/books-about-django/</samp>.
+      </li>
+      
+      <li>Only registered users will be able to search and add pages to categories. And so, visitors to the site should be able to register for an account.
+      </li>
+    </ul>
+
+    <p style="font-family:verdana">
+      <h5>Back to
+        <a href='/rango/'>home</a> page.
+      </h5>
+    </p>
+
+  </body>
+
+</html>
