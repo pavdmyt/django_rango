@@ -7,6 +7,9 @@ class Category(models.Model):
     def __unicode__(self):  # use __str__ in Python 3
         return self.name
 
+    class Meta:
+        verbose_name_plural = 'Categories'
+
 
 class Page(models.Model):
     category = models.ForeignKey(Category)
