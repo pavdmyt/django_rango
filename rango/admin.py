@@ -11,7 +11,8 @@ class PageAdmin(admin.ModelAdmin):
 # re-order fields in the Category edit form
 
 class CatAdmin(admin.ModelAdmin):
-    fields = ['name', 'likes', 'views']
+    prepopulated_fields = {'slug': ('name',)}
+    fields = ['name', 'slug', 'likes', 'views']
 
 
 # register my models
