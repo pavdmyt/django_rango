@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Rango</title>
+	</head>
+
+	<body>
+		<h1>Add a Page</h1>
+
+		<form id="page_form" method="post" action="/rango/category/{{ cat_name_slug }}/add_page/">
+
+			{% if category %}
+				{% csrf_token %}
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+
+				{% for field in form.visible_fields %}
+					{{ field.errors }}
+					{{ field.help_text }}
+					{{ field }}<br />
+				{% endfor %}
+
+			<input type="submit" name="submit" value="Create Page" />
+
+			{% else %}
+				The specified category does not exist!
+				<p>
+      				<h5>Back to
+        				<a href='/rango/'>home</a> page.
+      				</h5>
+    			</p>
+			{% endif %}
+
+		</form>
+	</body>
+
+</html>
