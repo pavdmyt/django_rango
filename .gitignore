@@ -1,2 +1,6 @@
+# Python specific
 *.py[cod]
 test_script.py
+
+# Project specific
+media/profile_images/

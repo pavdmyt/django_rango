@@ -1,7 +1,7 @@
 from django.shortcuts import render
 # from django.http import HttpResponse
 from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
 
 def index(request):
@@ -112,3 +112,60 @@ def add_page(request, category_name_slug):
                     'cat_name_slug': category_name_slug}
 
     return render(request, 'rango/add_page.html', context_dict)
+
+
+def register(request):
+
+    # Telling the template whether the registration was successful.
+    # Set to False initially. Code changes value to True when
+    # registration succeeds.
+    registered = False
+
+    if request.method == 'POST':
+        # Grab info from the raw form information.
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # Save user's form data to the database.
+            user = user_form.save()
+
+            # Hash the password with the `set_password` method.
+            # Once hashed, user object can be updated.
+            user.set_password(user.password)
+            user.save()
+
+            # Sort out the UserProfile instance.
+            # commit=False since we need to set the user attribute
+            # manually. This delays saving the model until we're ready
+            # to avoid integrity problems.
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            # Check whether user provide a profile picture.
+            # If so, get it from the input form and put it in the
+            # UserProfile model.
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+
+            # Now save the UserProfile model instance.
+            profile.save()
+
+            # Registration was successful.
+            registered = True
+
+        # Invalid form or forms.
+        # Print problems to the terminal.
+        else:
+            print(user_form.errors, profile_form.errors)
+
+    # Not HTTP POST.
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render(request,
+                  'rango/register.html',
+                  {'user_form': user_form,
+                   'profile_form': profile_form,
+                   'registered': registered})
