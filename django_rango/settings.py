@@ -102,3 +102,8 @@ TEMPLATE_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# Redirect users that aren't logged in.
+
+LOGIN_URL = '/rango/login/'

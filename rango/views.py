@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
 
@@ -63,6 +63,7 @@ def category(request, category_name_slug):
     return render(request, 'rango/category.html', context_dict)
 
 
+@login_required
 def add_category(request):
     # A HTTP POST?
     if request.method == 'POST':
@@ -88,6 +89,7 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 
+@login_required
 def add_page(request, category_name_slug):
 
     try:
@@ -193,10 +195,22 @@ def user_login(request):
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your Rango account is disabled.")
+
+        # Bad login details were provided. We can't log the user in.
         else:
-            # Bad login details were provided. We can't log the user in.
+            # Check if given `username` in database.
+            for item in UserProfile.objects.all():
+                in_db = item.user.username == username
+                if in_db:
+                    break
+
+            if not in_db:
+                return HttpResponse("User <i>{}</i> is not registered.".format(username))
+
+            # In database, but incorrect password.
             print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
+
     # The request is not HTTP POST.
     else:
         return render(request, 'rango/login.html', {})
