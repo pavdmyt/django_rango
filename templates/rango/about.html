@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 
 {% load staticfiles %}
 
-<html>
-  
-  <body>
+{% block title %}
+    {{ block.super }}
+{% endblock %}
 
+{% block body_block %}
     <h2 style="font-family:verdana">Rango About page</h2>
 
     <p title="Tango With Django!" style="font-family:verdana">I'm working on
@@ -57,12 +58,12 @@
       </li>
     </ul>
 
+    <!--
     <p style="font-family:verdana">
       <h5>Back to
-        <a href='/rango/'>home</a> page.
+        <a href="{% url 'index' %}">home</a> page.
       </h5>
     </p>
+    -->
 
-  </body>
-
-</html>
+{% endblock %}

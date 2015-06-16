@@ -1,31 +1,29 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 
-<html>
-	<head>
-		<title>Rango</title>
-	</head>
+{% block title %}
+	{{ block.super }}
+{% endblock %}
 
-	<body>
-		<h1>Add a Category</h1>
+{% block body_block %}
+	<h1>Add a Category</h1>
 
-		<form id="category_form" method="post" action="/rango/add_category/">
+	<form id="category_form" method="post" action="/rango/add_category/">
 
-			<!-- Cross-Site Request Forgery token.
-			Helps to protect and secure the HTTP POST action that is initiated
-			on the subsequent submission of a form. -->
-			{% csrf_token %}
-			{% for hidden in form.hidden_fields %}
-				{{ hidden }}
-			{% endfor %}
+		<!-- Cross-Site Request Forgery token.
+		Helps to protect and secure the HTTP POST action that is initiated
+		on the subsequent submission of a form. -->
+		{% csrf_token %}
+		{% for hidden in form.hidden_fields %}
+			{{ hidden }}
+		{% endfor %}
 
-			{% for field in form.visible_fields %}
-				{{ field.errors }}
-				{{ field.help_text }}
-				{{ field }}
-			{% endfor %}
+		{% for field in form.visible_fields %}
+			{{ field.errors }}
+			{{ field.help_text }}
+			{{ field }}
+		{% endfor %}
 
-			<input type="submit" name="submit" value="Create Category" />
-		</form>
-	</body>
+		<input type="submit" name="submit" value="Create Category" />
+	</form>
 
-</html>
+{% endblock %}
