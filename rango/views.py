@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -22,8 +24,35 @@ def index(request):
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict['pages'] = pages_list
 
-    # render the response
-    return render(request, 'rango/index.html', context_dict)
+    #
+    # Cookies to calculate number of site visits.
+    #
+    visits = int(request.COOKIES.get('visits', '1'))
+    reset_last_visit_time = False
+    response = render(request, 'rango/index.html', context_dict)
+
+    # Does the cookie `last_visit` exist?
+    if 'last_visit' in request.COOKIES:
+        last_visit = request.COOKIES['last_visit']
+        last_visit_time = datetime.strptime(last_visit[:-7],
+                                            "%Y-%m-%d %H:%M:%S")
+
+        # If it's been more than a day since the last visit...
+        if (datetime.now() - last_visit_time).days > 0:
+            visits += 1
+            reset_last_visit_time = True
+    else:
+        reset_last_visit_time = True
+        context_dict['visits'] = visits
+
+        # Obtain Response object early so we can add cookie info.
+        response = render(request, 'rango/index.html', context_dict)
+
+    if reset_last_visit_time:
+        response.set_cookie('last_visit', datetime.now())
+        response.set_cookie('visits', visits)
+
+    return response
 
 
 def about(request):
