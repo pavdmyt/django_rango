@@ -11,6 +11,9 @@
 		<!-- Header section -->
 		<a href="{% url 'index' %}">Home</a>
 		<a href="{% url 'about' %}">About</a>
+        {% if user.is_authenticated %}
+            user: <b>{{ user.username }}</b>, site visits: {{ visits }}
+        {% endif %}
 		<hr />
 
 		<!-- Actual page content -->

@@ -27,13 +27,12 @@ def index(request):
     #
     # Cookies to calculate number of site visits.
     #
-    visits = int(request.COOKIES.get('visits', '1'))
+    visits = request.session.get('visits', 1)
     reset_last_visit_time = False
-    response = render(request, 'rango/index.html', context_dict)
 
     # Does the cookie `last_visit` exist?
-    if 'last_visit' in request.COOKIES:
-        last_visit = request.COOKIES['last_visit']
+    last_visit = request.session.get('last_visit')
+    if last_visit:
         last_visit_time = datetime.strptime(last_visit[:-7],
                                             "%Y-%m-%d %H:%M:%S")
 
@@ -43,16 +42,14 @@ def index(request):
             reset_last_visit_time = True
     else:
         reset_last_visit_time = True
-        context_dict['visits'] = visits
-
-        # Obtain Response object early so we can add cookie info.
-        response = render(request, 'rango/index.html', context_dict)
 
     if reset_last_visit_time:
-        response.set_cookie('last_visit', datetime.now())
-        response.set_cookie('visits', visits)
+        request.session['last_visit'] = str(datetime.now())
+        request.session['visits'] = visits
 
-    return response
+    context_dict['visits'] = visits
+
+    return render(request, 'rango/index.html', context_dict)
 
 
 def about(request):
