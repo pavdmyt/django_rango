@@ -5,3 +5,7 @@ test_script.py
 # Project specific
 media/profile_images/
 *.sqlite3
+
+# No need to track after including django-registration-redux
+templates/rango/login.html
+templates/rango/register.html
