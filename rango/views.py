@@ -143,3 +143,8 @@ def add_page(request, category_name_slug):
                     'cat_name_slug': category_name_slug}
 
     return render(request, 'rango/add_page.html', context_dict)
+
+
+@login_required
+def user_settings(request):
+    return render(request, 'registration/user_settings.html', {})

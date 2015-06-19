@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings  # for media server
 
+from rango import views
+
 from registration.backends.simple.views import RegistrationView
 
 
@@ -20,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^accounts/register/$', MyRegistrationView.as_view(),
         name='registration_register'),
     (r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^accounts/user/settings/$', views.user_settings, name='user_settings'),
 )
 
 

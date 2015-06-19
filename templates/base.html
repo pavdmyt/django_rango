@@ -13,6 +13,7 @@
 		<a href="{% url 'about' %}">About</a>
         {% if user.is_authenticated %}
             user: <b>{{ user.username }}</b>, site visits: {{ visits }}
+            <a href="{% url 'user_settings' %}">my settings</a>
         {% endif %}
 		<hr />
 
