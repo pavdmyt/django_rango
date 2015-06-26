@@ -5,6 +5,7 @@ test_script.py
 # Project specific
 media/profile_images/
 *.sqlite3
+api_key.txt
 
 # No need to track after including django-registration-redux
 templates/rango/login.html
