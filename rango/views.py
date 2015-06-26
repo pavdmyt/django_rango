@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from rango.faroo_search import run_query, API_KEY
 
 
 def index(request):
@@ -148,3 +149,16 @@ def add_page(request, category_name_slug):
 @login_required
 def user_settings(request):
     return render(request, 'registration/user_settings.html', {})
+
+
+def search(request):
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+
+        if query:
+            result_list = run_query(query, API_KEY)
+
+    context = {'result_list': result_list}
+    return render(request, 'rango/search.html', context)

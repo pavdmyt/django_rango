@@ -14,4 +14,6 @@ urlpatterns = patterns('',
 
         url(r'^category/(?P<category_name_slug>[\w\-]+)/$',
             views.category, name='category'),
+
+        url(r'^search/$', views.search, name='search'),
         )

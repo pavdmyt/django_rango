@@ -43,6 +43,7 @@
               {% if user.is_authenticated %}
                 <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
                 <li><a href="{% url 'add_category' %}">Add a new Category</a></li>
+                <li><a href="{% url 'search' %}">Search</a></li>
                 <li><a href="{% url 'user_settings' %}">Profile</a></li>
               {% else %}
                 <li><a href="{% url 'registration_register' %}">Register Here</a></li>
