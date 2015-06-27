@@ -60,6 +60,17 @@ def about(request):
 def category(request, category_name_slug):
     context_dict = {}
 
+    # For searching.
+    result_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+
+        if query:
+            result_list = run_query(query, API_KEY)
+
+        context_dict['result_list'] = result_list
+        # return render(request, 'rango/search.html', context_dict)
+
     try:
         # Can we find a category name slug with the given name?
         # If we can't the `get` method raises a `DoesNotExist exception.
@@ -149,19 +160,6 @@ def add_page(request, category_name_slug):
 @login_required
 def user_settings(request):
     return render(request, 'registration/user_settings.html', {})
-
-
-def search(request):
-    result_list = []
-
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-
-        if query:
-            result_list = run_query(query, API_KEY)
-
-    context = {'result_list': result_list}
-    return render(request, 'rango/search.html', context)
 
 
 def track_url(request):
