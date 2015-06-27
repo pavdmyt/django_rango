@@ -5,7 +5,7 @@ from rango.models import Category, Page, UserProfile
 # update Page model view at admin interface
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'url')
+    list_display = ('title', 'category', 'url', 'views')
 
 
 # re-order fields in the Category edit form
