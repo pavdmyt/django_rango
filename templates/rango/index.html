@@ -46,7 +46,7 @@
         <ul class="list-group">
           {% for page in pages %}
           <li class="list-group-item">
-            <a href="{{ page.url }}">{{ page.title }}</a> - {{ page.category }}
+            <a href="{% url 'goto' %}?page_id={{ page.id }}">{{ page.title }}</a> - {{ page.category }}
            <span class="badge">{{ page.views }} view(s)</span>
           </li>
           {% endfor %}
