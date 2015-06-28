@@ -1,7 +1,23 @@
 {% extends "base.html" %}
 
+{% block title %}{{ user.username }} info{% endblock %}
+
 
 {% block body_block %}
-  <h1 class="page-header">{{ user.username }} settings</h1>
+  <h1 class="page-header"><i>{{ user.username }}</i> profile</h1>
+  <p><strong>Username</strong>: <i>{{ user.username }}</i></p>
+  <p><strong>Email</strong>: <i>{{ user.email }}</i></p>
+
+  {% if profile.website %}
+    <p><strong>Website</strong>: <i>{{ profile.website }}</i></p>
+  {% endif %}
+
+  {% if profile.picture %}
+    <p><strong>Profile picture</strong>:</p>
+    <img src="/media/{{ profile.picture.name }}" alt="pic" style="width:100px;height:100px" class="img-rounded">
+  <br />
+  <br />
+  {% endif %}
+
   <a href="/accounts/password/change/">Change password</a>
 {% endblock %}

@@ -159,7 +159,16 @@ def add_page(request, category_name_slug):
 
 @login_required
 def user_settings(request):
-    return render(request, 'registration/user_settings.html', {})
+    context = {}
+
+    try:
+        profile = UserProfile.objects.get(user=request.user._wrapped)
+    except UserProfile.DoesNotExist:
+        pass
+    else:
+        context['profile'] = profile
+
+    return render(request, 'registration/user_settings.html', context)
 
 
 def track_url(request):
@@ -176,3 +185,21 @@ def track_url(request):
             return HttpResponseRedirect(page.url)
         else:
             return HttpResponseRedirect('/rango/')
+
+
+@login_required
+def register_profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user._wrapped
+            profile.save()
+            return HttpResponseRedirect('/rango/')
+        else:
+            print(form.errors)
+    else:
+        form = UserProfileForm()
+
+    return render(request, 'rango/profile_registration.html', {'form': form})

@@ -16,4 +16,6 @@ urlpatterns = patterns('',
             views.category, name='category'),
 
         url(r'^goto/$', views.track_url, name='goto'),
+
+        url(r'^add_profile/$', views.register_profile, name='reg_profile')
         )
