@@ -11,6 +11,17 @@
 {% block body_block %}
   <h1 class="page-header">{{ category_name }}</h1>
 
+  <!-- Like button -->
+  <p>
+    <b id="like_count">{{ category.likes }}</b> people like this category
+
+      {% if user.is_authenticated %}
+        <button id="likes" data-catid="{{ category.id }}" class="btn btn-xs btn-info" type="button">Like!</button>
+      {% endif %}
+  </p>
+  <br />
+
+
   {% if category %}
     {% if pages %}
     <ul>
@@ -32,6 +43,7 @@
   <br />
   <br />
   <br />
+
 
   <!-- Searching -->
   {% if user.is_authenticated %}

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -69,7 +69,6 @@ def category(request, category_name_slug):
             result_list = run_query(query, API_KEY)
 
         context_dict['result_list'] = result_list
-        # return render(request, 'rango/search.html', context_dict)
 
     try:
         # Can we find a category name slug with the given name?
@@ -80,7 +79,7 @@ def category(request, category_name_slug):
 
         # Retrieve all of the associated pages.
         # Note that filter returns >= 1 model instance.
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
 
         # Add results list to the template context under name pages
         context_dict['pages'] = pages
@@ -185,6 +184,20 @@ def track_url(request):
             return HttpResponseRedirect(page.url)
         else:
             return HttpResponseRedirect('/rango/')
+
+
+@login_required
+def like_category(request):
+    if request.method == 'GET':
+        cat_id = request.GET.get('category_id')
+
+        if cat_id:
+            cat = Category.objects.get(id=int(cat_id))
+            if cat:
+                cat.likes += 1
+                cat.save()
+
+    return HttpResponse(cat.likes)
 
 
 @login_required
