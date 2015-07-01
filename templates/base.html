@@ -56,9 +56,26 @@
 
     <div class="container-fluid">
       <div class="row">
+
         <div class="col-sm-3 col-md-2 sidebar">
           {% block side_block %}
-          {% get_category_list category %}
+
+            <!-- Search categories -->
+            <ul class="nav nav-list">
+              <li class="nav-header">Find a Category</li>
+              <form>
+                <label></label>
+                <li><input class="search-query span10" type="text" name="suggestion" value="" id="suggestion" /></li>
+              </form>
+              <br />
+            </ul>
+
+            <!-- Search suggestions -->
+            <div id="cats">
+            </div>
+
+            <!-- Category list -->
+            {% get_category_list category %}
           {% endblock %}
         </div>
 

@@ -10,8 +10,5 @@
         <a href="{% url 'category' c.slug %}">{{ c.name }}</a></li>
     {% endfor %}
 
-{% else %}
-    <li><strong>There are no category present.</strong></li>
-
   </ul>
 {% endif %}

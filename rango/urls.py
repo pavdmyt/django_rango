@@ -20,4 +20,7 @@ urlpatterns = patterns('',
         url(r'^add_profile/$', views.register_profile, name='reg_profile'),
 
         url(r'^like_category/$', views.like_category, name='like_category'),
+
+        url(r'^suggest_category/$', views.suggest_category,
+            name='suggest_category'),
         )
