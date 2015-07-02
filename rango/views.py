@@ -63,7 +63,7 @@ def category(request, category_name_slug):
     # For searching.
     result_list = []
     if request.method == 'POST':
-        query = request.POST['query'].strip()
+        query = request.POST.get('query', '').strip()
 
         if query:
             result_list = run_query(query, API_KEY)
