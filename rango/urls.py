@@ -23,4 +23,6 @@ urlpatterns = patterns('',
 
         url(r'^suggest_category/$', views.suggest_category,
             name='suggest_category'),
+
+        url(r'^auto_add_page/$', views.auto_add_page, name='auto_add_page'),
         )
