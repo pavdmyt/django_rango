@@ -31,6 +31,10 @@ class Page(models.Model):
     url = models.URLField()
     views = models.IntegerField(default=0)
 
+    # Make these fields optional.
+    last_visit = models.DateTimeField('last visit', blank=True, null=True)
+    first_visit = models.DateTimeField('first visit', blank=True, null=True)
+
     def __unicode__(self):  # use __str__ in Python 3
         return self.title
 

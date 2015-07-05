@@ -1,5 +1,6 @@
 # Python specific
 *.py[cod]
+.coverage
 test_script.py
 
 # Project specific

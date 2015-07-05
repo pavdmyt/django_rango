@@ -141,6 +141,7 @@ def add_page(request, category_name_slug):
                 page = form.save(commit=False)
                 page.category = cat
                 page.views = 0
+                page.first_visit = datetime.now()
                 page.save()
                 # Redirect to appropriate category page.
                 return category(request, category_name_slug)
@@ -178,6 +179,7 @@ def track_url(request):
             # Fetch the page by ID and increment views field.
             page = Page.objects.filter(id=page_id)[0]
             page.views += 1
+            page.last_visit = datetime.now()
             page.save()
 
             # Redirect user to specified URL.

@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from rango.models import Category
+from rango.models import Category, Page
 
 
 class CategoryMethodTests(TestCase):
@@ -24,6 +26,38 @@ class CategoryMethodTests(TestCase):
         cat = Category(name='Random Category String')
         cat.save()
         self.assertEqual(cat.slug, 'random-category-string')
+
+
+class PageMethodTests(TestCase):
+
+    def test_visits_are_not_in_the_future(self):
+        """
+        Checks that the first visit or last visit
+        are not in the future.
+        """
+        pages = Page.objects.all()
+        now = datetime.now()
+
+        for page in pages:
+
+            # Check `first_visit`.
+            if page.first_visit:
+                self.assertEqual((page.first_visit < now), True)
+
+            # Check `last_visit`.
+            if page.last_visit:
+                self.assertEqual((page.last_visit < now), True)
+
+    def test_last_visit_is_after_first(self):
+        """
+        Checks that the last visit equal to or after
+        the first visit.
+        """
+        pages = Page.objects.exclude(last_visit=None)
+
+        for page in pages:
+            if page.first_visit:
+                self.assertEqual((page.first_visit <= page.last_visit), True)
 
 
 class IndexViewTests(TestCase):
