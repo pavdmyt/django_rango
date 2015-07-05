@@ -1,2 +1,10 @@
+test:
+	python manage.py test rango
+
+coverage:
+	coverage run ./manage.py test
+	coverage report
+
 clean:
-	rm -f `find . -type f -name '*.py[co]'`
+	find . -type f -name '*.py[co]' -delete
+	rm -f .coverage
