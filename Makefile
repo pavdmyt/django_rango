@@ -1,8 +1,11 @@
-test:
-	python manage.py test rango
+flake:
+	flake8 rango/tests/
+
+test: flake
+	python manage.py test -v 2
 
 coverage:
-	coverage run ./manage.py test
+	coverage run --source='.' manage.py test -v 2
 	coverage report
 
 clean:

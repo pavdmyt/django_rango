@@ -21,6 +21,6 @@ exclude_lines =
 omit =
     rango/faroo_search.py
     rango/migrations/*
-    rango/tests.py
+    rango/tests/*
  
 show_missing = True
