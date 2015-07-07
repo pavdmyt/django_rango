@@ -250,6 +250,18 @@ class CategoryViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['cat_name_slug'], cat_name_slug)
 
+    def test_category_view_with_non_exist_category(self):
+        """
+        If category doesn't exist, an appropriate msg
+        should be displayed.
+        """
+        category_slug = 'no-such-category'
+        response = self.client.get(self.url + category_slug + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "The specified category does not exist!")
+
     #
     # Searching
     #
