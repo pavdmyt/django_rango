@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -266,6 +267,97 @@ class CategoryViewTests(TestCase):
     # Searching
     #
     # !!!TODO: add appropriate tests.
+
+
+class AddCategoryViewTests(TestCase):
+
+    def setUp(self):
+        # Create test user in test DB.
+        self.user = User.objects.create_user(username='test_user',
+                                             password='1234')
+
+    def test_if_no_auth_redirect_to_login(self):
+        """
+        Checks that if user is not logged in he is redirected
+        to login page.
+        """
+        response = self.client.get(reverse('add_category'), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        redirect = response.redirect_chain[0]
+        redirect_url = redirect[0]
+
+        self.assertTrue(
+            'accounts/login/?next=/rango/add_category/' in redirect_url)
+
+    def test_page_available_to_auth_user(self):
+        """
+        Checks that logged in user can access add_category page.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse('add_category'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Add new Category")
+
+    def test_user_can_add_category(self):
+        """
+        Checks that logged in user can add category.
+        """
+        # Login.
+        self.client.login(username='test_user', password='1234')
+
+        # Form data.
+        cat_name = 'test category'
+        form_data = {'name': cat_name,
+                     'views': '1',
+                     'likes': '0'}
+
+        # Submit form.
+        response = self.client.post(path=reverse('add_category'),
+                                    data=form_data)
+        self.assertEqual(response.status_code, 200)
+
+        # Added category is in DB.
+        cat = Category.objects.filter(name=cat_name)
+        self.assertTrue(cat)
+        self.assertTrue(len(Category.objects.all()) == 1)
+
+    def test_form_in_context_no_auth(self):
+        """
+        Checks `form` context if user is not logged in.
+        """
+        # Form data.
+        form_data = {'name': 'test category',
+                     'views': '1',
+                     'likes': '0'}
+
+        # Submit form.
+        response = self.client.post(path=reverse('add_category'),
+                                    data=form_data,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        form = response.context['form']
+        self.assertEqual(form.data, {})
+
+    def test_form_not_in_context_auth(self):
+        """
+        Checks `form` context is not available if user is logged in.
+        (Should show Index page instead.)
+        """
+        # Login.
+        self.client.login(username='test_user', password='1234')
+
+        # Form data.
+        form_data = {'name': 'test_category',
+                     'views': '1',
+                     'likes': '0'}
+
+        # Submit form.
+        response = self.client.post(path=reverse('add_category'),
+                                    data=form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(u'form' not in response.context.keys())
 
 
 #######################################################################
