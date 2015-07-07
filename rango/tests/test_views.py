@@ -177,6 +177,85 @@ class IndexViewTests(TestCase):
         self.assertEqual(session.get('visits'), 2)
 
 
+class AboutViewTests(TestCase):
+
+    def test_status_code(self):
+        response = self.client.get(reverse('about'))
+        self.assertEqual(response.status_code, 200)
+
+
+class CategoryViewTests(TestCase):
+
+    def setUp(self):
+        self.url = 'http://127.0.0.1:8000/rango/category/'
+        self.cat = add_cat('rango_test', 1, 1)
+
+    #
+    # Main functionality.
+    #
+    def test_category_name_context(self):
+        """
+        Checks `category_name` contains desired data.
+        """
+        response = self.client.get(self.url + self.cat.slug + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['category_name'],
+                         self.cat.name)
+
+    def test_pages_context_sorted_by_views(self):
+        """
+        Checks `pages` context contains all pages sorted by views.
+        """
+        # Populate DB.
+        url = 'http://example.com'
+
+        add_page(cat=self.cat, name='test1', url=url, views=1)
+        add_page(cat=self.cat, name='test2', url=url, views=2)
+        add_page(cat=self.cat, name='test3', url=url, views=3)
+        add_page(cat=self.cat, name='test4', url=url, views=4)
+        add_page(cat=self.cat, name='test5', url=url, views=5)
+        add_page(cat=self.cat, name='test6', url=url, views=6)
+        add_page(cat=self.cat, name='test7', url=url, views=7)
+
+        # Test.
+        response = self.client.get(self.url + self.cat.slug + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertQuerysetEqual(
+            response.context['pages'],
+            ['<Page: test7>',
+             '<Page: test6>',
+             '<Page: test5>',
+             '<Page: test4>',
+             '<Page: test3>',
+             '<Page: test2>',
+             '<Page: test1>'])
+
+        cats_num = len(response.context['pages'])
+        self.assertEqual(cats_num, 7)
+
+    def test_category_context(self):
+        """
+        Checks `category` contains desired data.
+        """
+        response = self.client.get(self.url + self.cat.slug + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.context['category'], Category)
+
+    def test_cat_name_slug_context(self):
+        """
+        Checks `cat_name_slug` contains desired data.
+        """
+        cat_name_slug = self.cat.slug
+        response = self.client.get(self.url + cat_name_slug + '/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['cat_name_slug'], cat_name_slug)
+
+    #
+    # Searching
+    #
+    # !!!TODO: add appropriate tests.
+
+
 #######################################################################
 # Helper functions
 
