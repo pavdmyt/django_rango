@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils import timezone
 
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 
 
 class IndexViewTests(TestCase):
@@ -488,6 +488,55 @@ class AddPageViewTests(TestCase):
         self.assertEqual(cat_slug, self.cat.slug)
 
 
+class UserSettingsViewTests(TestCase):
+
+    def setUp(self):
+        # Create test user in test DB.
+        self.user = User.objects.create_user(username='test_user',
+                                             password='1234')
+
+    def test_if_no_auth_redirect_to_login(self):
+        """
+        Checks that if user is not logged in he is redirected
+        to login page.
+        """
+        response = self.client.get(reverse('user_settings'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_page_available_to_auth_user(self):
+        """
+        Checks that logged in user can access user_settings page.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse('user_settings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Change password")
+
+    def test_context_auth_user(self):
+        """
+        Checks context if user is logged in.
+        """
+        # Add user profile.
+        userprofile = add_userprofile(user=self.user,
+                                      website='http://example.com')
+
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse('user_settings'))
+        self.assertEqual(response.status_code, 200)
+
+        profile = response.context['profile']
+        self.assertEqual(profile, userprofile)
+
+    def test_user_does_not_have_userprofile(self):
+        """
+        Checks context if user does not have filled userprofile.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse('user_settings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('profile' not in response.context.keys())
+
+
 #######################################################################
 # Helper functions
 
@@ -505,3 +554,10 @@ def add_page(cat, name, url, views=0):
     p.views = views
     p.save()
     return p
+
+
+def add_userprofile(user, website):
+    up = UserProfile.objects.get_or_create(user=user)[0]
+    up.website = website
+    up.save()
+    return up
