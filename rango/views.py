@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
@@ -141,12 +142,12 @@ def add_page(request, category_name_slug):
                 page = form.save(commit=False)
                 page.category = cat
                 page.views = 0
-                page.first_visit = datetime.now()
+                page.first_visit = timezone.now()
                 page.save()
                 # Redirect to appropriate category page.
                 return category(request, category_name_slug)
         else:
-            print(form.errors)
+            print(form.errors)  # pragma: no cover
     else:
         form = PageForm()
 

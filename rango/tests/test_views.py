@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.utils import timezone
 
 from rango.models import Category, Page
 
@@ -188,7 +189,7 @@ class AboutViewTests(TestCase):
 class CategoryViewTests(TestCase):
 
     def setUp(self):
-        self.url = 'http://127.0.0.1:8000/rango/category/'
+        self.url = 'http://testserver/rango/category/'
         self.cat = add_cat('rango_test', 1, 1)
 
     #
@@ -358,6 +359,133 @@ class AddCategoryViewTests(TestCase):
                                     data=form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(u'form' not in response.context.keys())
+
+
+class AddPageViewTests(TestCase):
+
+    def setUp(self):
+        # Create test user in test DB.
+        self.user = User.objects.create_user(username='test_user',
+                                             password='1234')
+
+        # Set up category and appropriate URL.
+        self.cat = add_cat('rango_test', 1, 1)
+        self.url = 'http://testserver/rango/category/'
+        self.tail = self.cat.slug + '/add_page/'
+
+    def test_if_no_auth_redirect_to_login(self):
+        """
+        Checks that if user is not logged in he is redirected
+        to login page.
+        """
+        response = self.client.get(self.url + self.tail, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        redirect = response.redirect_chain[0]
+        redirect_url = redirect[0]
+
+        # Compose URL.
+        base_url = 'accounts/login/?next=/rango/category/'
+        test_url = base_url + self.tail
+
+        self.assertTrue(test_url in redirect_url)
+
+    def test_page_available_to_auth_user(self):
+        """
+        Checks that logged in user can access add_page page.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(self.url + self.tail)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Add a Page to")
+
+    def test_add_page_with_non_exist_category_auth_user(self):
+        """
+        If category doesn't exist, an appropriate msg
+        should be displayed (user is logged in).
+        """
+        self.client.login(username='test_user', password='1234')
+        category_slug = 'no-such-category'
+        response = self.client.get(self.url + category_slug + '/add_page/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            "The specified category does not exist!")
+
+    def test_add_page_with_non_exist_category_non_auth_user(self):
+        """
+        If category doesn't exist, not logged in user trying to add
+        a new page should be redirected to login page.
+        """
+        category_slug = 'no-such-category'
+        response = self.client.get(self.url + category_slug + '/add_page/')
+        self.assertEqual(response.status_code, 302)
+
+    def test_user_can_add_page_to_category(self):
+        """
+        Checks that logged in user can add page to category.
+        """
+        # Login.
+        self.client.login(username='test_user', password='1234')
+
+        # Form data.
+        page_name = 'test page'
+        form_data = {'category': self.cat,
+                     'title': page_name,
+                     'views': '1',
+                     'url': 'http://www.example.com'}
+
+        # Submit form.
+        response = self.client.post(path=self.url + self.tail,
+                                    data=form_data)
+        self.assertEqual(response.status_code, 200)
+
+        # Added page is in DB.
+        page = Page.objects.filter(title=page_name)
+        self.assertTrue(page)
+        self.assertTrue(len(Page.objects.all()) == 1)
+
+    def test_first_visit_is_set_up(self):
+        """
+        Checks that first_visit is set up in time of page addition.
+        """
+        # Login.
+        self.client.login(username='test_user', password='1234')
+
+        # Form data.
+        page_name = 'test page'
+        form_data = {'category': self.cat,
+                     'title': page_name,
+                     'views': '1',
+                     'url': 'http://www.example.com'}
+
+        # Submit form.
+        response = self.client.post(path=self.url + self.tail,
+                                    data=form_data)
+        now = timezone.now()
+        self.assertEqual(response.status_code, 200)
+
+        # Check page first visit.
+        page = Page.objects.filter(title=page_name)[0]
+        time_delta = now - page.first_visit
+        self.assertTrue(time_delta.total_seconds() < 1)
+
+    def test_context_auth_user_get_request(self):
+        """
+        Checks context if user is logged in (GET request).
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(self.url + self.tail)
+        self.assertEqual(response.status_code, 200)
+
+        form = response.context['form']
+        self.assertEqual(form.data, {})
+
+        category = response.context['category']
+        self.assertEqual(category, self.cat)
+
+        cat_slug = response.context['cat_name_slug']
+        self.assertEqual(cat_slug, self.cat.slug)
 
 
 #######################################################################
