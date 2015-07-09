@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from rango.models import Category, Page, UserProfile
+from rango.views import get_category_list
 
 
 class IndexViewTests(TestCase):
@@ -661,6 +662,75 @@ class RegisterProfileViewTests(TestCase):
         self.assertEqual(up.user.username, self.user.username)
         self.assertEqual(up.website, site)
         self.assertTrue(len(UserProfile.objects.all()) == 1)
+
+
+class SuggestCategoryViewTests(TestCase):
+
+    def setUp(self):
+        # Fill test DB with some categories.
+        add_cat('Alpha', 1, 1)
+        add_cat('Alphabet', 1, 1)
+        add_cat('AI', 1, 1)
+        add_cat('Aliens', 1, 1)
+        add_cat('Spam', 1, 1)
+        add_cat('Eggs', 1, 1)
+        add_cat('FooBar', 1, 1)
+
+    def test_get_category_list(self):
+        """
+        Ensures that `get_category_list` helper function
+        works properly.
+        """
+        # 1
+        cat_lst = get_category_list(0, 'Al')
+        self.assertQuerysetEqual(
+            cat_lst.order_by('name'),  # order queryset
+            ['<Category: Aliens>',
+             '<Category: Alpha>',
+             '<Category: Alphabet>'])
+
+        # 2
+        cat_lst = get_category_list(0, 'S')
+        self.assertQuerysetEqual(
+            cat_lst.order_by('name'),  # order queryset
+            ['<Category: Spam>'])
+
+        # 3
+        cat_lst = get_category_list(2, 'A')
+        self.assertQuerysetEqual(
+            cat_lst, ['<Category: Alpha>', '<Category: Alphabet>'])
+
+        # 4
+        cat_lst = get_category_list(2)
+        self.assertEqual(cat_lst, [])
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template.
+        """
+        response = self.client.get(reverse('suggest_category'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'rango/cats.html')
+
+    def test_context_with_suggesion_param(self):
+        """
+        Checks context when 'suggesion' parameter is given
+        in GET request.
+        """
+        response = self.client.get(path=reverse('suggest_category'),
+                                   data={'suggestion': 'Al'})
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(len(response.context['cats']), 3)
+
+    def test_context_without_suggesion_param(self):
+        """
+        Checks context when 'suggesion' parameter is not given
+        in GET request.
+        """
+        response = self.client.get(path=reverse('suggest_category'),
+                                   data={'suggestion': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['cats'], [])
 
 
 #######################################################################
