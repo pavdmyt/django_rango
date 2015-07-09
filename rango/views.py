@@ -216,7 +216,7 @@ def register_profile(request):
             profile.save()
             return HttpResponseRedirect('/rango/')
         else:
-            print(form.errors)
+            print(form.errors)  # pragma: no cover
     else:
         form = UserProfileForm()
 

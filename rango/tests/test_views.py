@@ -599,6 +599,70 @@ class LikeCategoryViewTests(TestCase):
         self.assertEqual(cat.likes, likes + 1)
 
 
+class RegisterProfileViewTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='test_user',
+                                             password='1234')
+
+    def test_if_no_auth_redirect_to_login(self):
+        """
+        Checks that if user is not logged in he is redirected
+        to login page.
+        """
+        response = self.client.get(reverse('reg_profile'))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('http://testserver/accounts/login/' in response.url)
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse('reg_profile'))
+        self.assertEqual(response.status_code, 200)
+
+        base_template = 'base.html'
+        page_template = 'rango/profile_registration.html'
+
+        self.assertTemplateUsed(response, base_template)
+        self.assertTemplateUsed(response, page_template)
+
+    def test_context_auth_user_get_request(self):
+        """
+        Checks context if user is logged in (GET request).
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse('reg_profile'))
+        self.assertEqual(response.status_code, 200)
+
+        form = response.context['form']
+        self.assertEqual(form.data, {})
+
+    def test_user_can_add_page_to_category(self):
+        """
+        Checks that logged in user can add page to category.
+        """
+        # Login.
+        self.client.login(username='test_user', password='1234')
+
+        # Form data.
+        site = 'http://www.example.com/'
+        form_data = {'website': site}
+
+        # Submit form.
+        response = self.client.post(path=reverse('reg_profile'),
+                                    data=form_data)
+        self.assertEqual(response.status_code, 302)
+
+        # User profile for test_user is added into DB
+        # with additional info.
+        up = UserProfile.objects.get(user=self.user)
+        self.assertEqual(up.user.username, self.user.username)
+        self.assertEqual(up.website, site)
+        self.assertTrue(len(UserProfile.objects.all()) == 1)
+
+
 #######################################################################
 # Helper functions
 
