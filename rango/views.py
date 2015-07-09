@@ -198,12 +198,11 @@ def like_category(request):
         cat_id = request.GET.get('category_id')
 
         if cat_id:
-            cat = Category.objects.get(id=int(cat_id))
+            cat = Category.objects.get(id=cat_id)
             if cat:
                 cat.likes += 1
                 cat.save()
-
-    return HttpResponse(cat.likes)
+                return HttpResponse(cat.likes)
 
 
 @login_required

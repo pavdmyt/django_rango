@@ -577,6 +577,28 @@ class TrackUrlViewTests(TestCase):
         self.assertEqual(page.views, views + 1)
 
 
+class LikeCategoryViewTests(TestCase):
+
+    def setUp(self):
+        self.cat = add_cat('rango_test', 0, 0)
+        self.user = User.objects.create_user(username='test_user',
+                                             password='1234')
+
+    def test_cat_likes_increment(self):
+        """
+        Checks that category.likes parameter is incremented every
+        time appropriate request received.
+        """
+        likes = 0
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(path=reverse('like_category'),
+                                   data={'category_id': self.cat.id})
+        self.assertEqual(response.status_code, 200)
+
+        cat = Category.objects.get(id=self.cat.id)
+        self.assertEqual(cat.likes, likes + 1)
+
+
 #######################################################################
 # Helper functions
 
