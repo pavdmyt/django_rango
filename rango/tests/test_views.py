@@ -282,14 +282,9 @@ class AddCategoryViewTests(TestCase):
         Checks that if user is not logged in he is redirected
         to login page.
         """
-        response = self.client.get(reverse('add_category'), follow=True)
-        self.assertEqual(response.status_code, 200)
-
-        redirect = response.redirect_chain[0]
-        redirect_url = redirect[0]
-
-        self.assertTrue(
-            'accounts/login/?next=/rango/add_category/' in redirect_url)
+        response = self.client.get(reverse('add_category'))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('http://testserver/accounts/login/' in response.url)
 
     def test_page_available_to_auth_user(self):
         """
@@ -378,17 +373,9 @@ class AddPageViewTests(TestCase):
         Checks that if user is not logged in he is redirected
         to login page.
         """
-        response = self.client.get(self.url + self.tail, follow=True)
-        self.assertEqual(response.status_code, 200)
-
-        redirect = response.redirect_chain[0]
-        redirect_url = redirect[0]
-
-        # Compose URL.
-        base_url = 'accounts/login/?next=/rango/category/'
-        test_url = base_url + self.tail
-
-        self.assertTrue(test_url in redirect_url)
+        response = self.client.get(self.url + self.tail)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('http://testserver/accounts/login/' in response.url)
 
     def test_page_available_to_auth_user(self):
         """
@@ -420,6 +407,7 @@ class AddPageViewTests(TestCase):
         category_slug = 'no-such-category'
         response = self.client.get(self.url + category_slug + '/add_page/')
         self.assertEqual(response.status_code, 302)
+        self.assertTrue('http://testserver/accounts/login/' in response.url)
 
     def test_user_can_add_page_to_category(self):
         """
@@ -502,6 +490,7 @@ class UserSettingsViewTests(TestCase):
         """
         response = self.client.get(reverse('user_settings'))
         self.assertEqual(response.status_code, 302)
+        self.assertTrue('http://testserver/accounts/login/' in response.url)
 
     def test_page_available_to_auth_user(self):
         """
