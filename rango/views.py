@@ -177,16 +177,19 @@ def track_url(request):
         page_id = request.GET.get('page_id')
 
         if page_id:
-            # Fetch the page by ID and increment views field.
-            page = Page.objects.filter(id=page_id)[0]
-            page.views += 1
-            page.last_visit = datetime.now()
-            page.save()
+            try:
+                page = Page.objects.get(id=page_id)
+            except Page.DoesNotExist:
+                page = None
 
-            # Redirect user to specified URL.
-            return HttpResponseRedirect(page.url)
-        else:
-            return HttpResponseRedirect('/rango/')
+            if page:
+                page.views += 1
+                page.last_visit = timezone.now()
+                page.save()
+                # Redirect user to specified URL.
+                return HttpResponseRedirect(page.url)
+
+        return HttpResponseRedirect('/rango/')
 
 
 @login_required

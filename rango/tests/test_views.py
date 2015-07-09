@@ -537,6 +537,57 @@ class UserSettingsViewTests(TestCase):
         self.assertTrue('profile' not in response.context.keys())
 
 
+class TrackUrlViewTests(TestCase):
+
+    def setUp(self):
+        self.cat = add_cat('rango_test', 1, 1)
+        self.page = add_page(cat=self.cat,
+                             name='test page',
+                             url='http://testserver/rango/about/')
+
+    def test_redirect_if_no_page_id_param(self):
+        """
+        If no page_id parameter in GET request,
+        redirect to index page.
+        """
+        response = self.client.get(reverse('goto'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'http://testserver/rango/')
+
+    def test_redirect_if_unproper_page_id_param(self):
+        """
+        If page_id points to non-existent page in DB,
+        redirect to index page.
+        """
+        response = self.client.get(path=reverse('goto'),
+                                   data={'page_id': 42})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'http://testserver/rango/')
+
+    def test_redirect_to_page_url_if_page_id_param(self):
+        """
+        If proper page_id parameter in GET request, redirect to
+        appropriate page.
+        """
+        response = self.client.get(path=reverse('goto'),
+                                   data={'page_id': self.page.id})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.page.url)
+
+    def test_page_views_increment(self):
+        """
+        Checks that page.views parameter is incremented every time
+        page accessed.
+        """
+        views = 0
+        response = self.client.get(path=reverse('goto'),
+                                   data={'page_id': self.page.id})
+        self.assertEqual(response.status_code, 302)
+
+        page = Page.objects.get(id=self.page.id)
+        self.assertEqual(page.views, views + 1)
+
+
 #######################################################################
 # Helper functions
 
