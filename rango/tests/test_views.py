@@ -15,6 +15,20 @@ class IndexViewTests(TestCase):
         # Name attribute from urlpatterns.
         self.urlpat_name = 'index'
 
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template(s).
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 200)
+
+        base_template = 'base.html'
+        page_template = 'rango/index.html'
+
+        self.assertTemplateUsed(response, base_template)
+        self.assertTemplateUsed(response, page_template)
+
     #
     # Categories
     #
@@ -185,9 +199,21 @@ class IndexViewTests(TestCase):
 
 class AboutViewTests(TestCase):
 
+    def setUp(self):
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'about'
+
     def test_status_code(self):
-        response = self.client.get(reverse('about'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template.
+        """
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'rango/about.html')
 
 
 class CategoryViewTests(TestCase):
@@ -199,6 +225,19 @@ class CategoryViewTests(TestCase):
     #
     # Main functionality.
     #
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template(s).
+        """
+        response = self.client.get(self.url + self.cat.slug + '/')
+        self.assertEqual(response.status_code, 200)
+
+        base_template = 'base.html'
+        page_template = 'rango/category.html'
+
+        self.assertTemplateUsed(response, base_template)
+        self.assertTemplateUsed(response, page_template)
+
     def test_category_name_context(self):
         """
         Checks `category_name` contains desired data.
@@ -282,6 +321,20 @@ class AddCategoryViewTests(TestCase):
                                              password='1234')
         # Name attribute from urlpatterns.
         self.urlpat_name = 'add_category'
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template(s).
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 200)
+
+        base_template = 'base.html'
+        page_template = 'rango/add_category.html'
+
+        self.assertTemplateUsed(response, base_template)
+        self.assertTemplateUsed(response, page_template)
 
     def test_if_no_auth_redirect_to_login(self):
         """
@@ -373,6 +426,20 @@ class AddPageViewTests(TestCase):
         self.cat = add_cat('rango_test', 1, 1)
         self.url = 'http://testserver/rango/category/'
         self.tail = self.cat.slug + '/add_page/'
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template(s).
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(self.url + self.tail)
+        self.assertEqual(response.status_code, 200)
+
+        base_template = 'base.html'
+        page_template = 'rango/add_page.html'
+
+        self.assertTemplateUsed(response, base_template)
+        self.assertTemplateUsed(response, page_template)
 
     def test_if_no_auth_redirect_to_login(self):
         """
@@ -490,6 +557,20 @@ class UserSettingsViewTests(TestCase):
                                              password='1234')
         # Name attribute from urlpatterns.
         self.urlpat_name = 'user_settings'
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template(s).
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 200)
+
+        base_template = 'base.html'
+        page_template = 'registration/user_settings.html'
+
+        self.assertTemplateUsed(response, base_template)
+        self.assertTemplateUsed(response, page_template)
 
     def test_if_no_auth_redirect_to_login(self):
         """
@@ -628,7 +709,7 @@ class RegisterProfileViewTests(TestCase):
 
     def test_proper_template_is_used(self):
         """
-        Checks that page is rendered with proper template.
+        Checks that page is rendered with proper template(s).
         """
         self.client.login(username='test_user', password='1234')
         response = self.client.get(reverse(self.urlpat_name))
