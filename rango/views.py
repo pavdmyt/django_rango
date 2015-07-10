@@ -245,7 +245,7 @@ def auto_add_page(request):
 
         # Get category.
         try:
-            cat = Category.objects.get(id=int(cat_id))
+            cat = Category.objects.get(id=cat_id)
         except Category.DoesNotExist:
             cat = None
 

@@ -733,6 +733,75 @@ class SuggestCategoryViewTests(TestCase):
         self.assertEqual(response.context['cats'], [])
 
 
+class AutoAddPageViewTests(TestCase):
+
+    def setUp(self):
+        self.cat = add_cat('rango_test', 0, 0)
+        self.user = User.objects.create_user(username='test_user',
+                                             password='1234')
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'auto_add_page'
+
+    def test_if_no_auth_redirect_to_login(self):
+        """
+        Checks that if user is not logged in he is redirected
+        to login page.
+        """
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue('http://testserver/accounts/login/' in response.url)
+
+    def test_request_with_no_params_auth_user(self):
+        """
+        Checks that proper message is shown if request contains
+        no parameters. Also ckecks context.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No pages currently in category.")
+
+        # Check context.
+        self.assertFalse('pages' in response.context)
+
+    def test_proper_template_is_used(self):
+        """
+        Checks that page is rendered with proper template.
+        """
+        self.client.login(username='test_user', password='1234')
+        response = self.client.get(reverse(self.urlpat_name))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'rango/page_list.html')
+
+    def test_user_can_add_page(self):
+        """
+        Checks that logged in user can add page by pressing dedicated
+        button which generates AJAX request. Also ckecks context.
+        """
+        # Login.
+        self.client.login(username='test_user', password='1234')
+
+        # AJAX reqest params.
+        page_title = 'Python.org'
+        params = {'title_data': page_title,
+                  'url_data':   'https://www.python.org/',
+                  'catid_data': self.cat.id}
+
+        # Submit form.
+        response = self.client.get(path=reverse(self.urlpat_name),
+                                   data=params)
+        self.assertEqual(response.status_code, 200)
+
+        # Added page is in DB.
+        page = Page.objects.get(title=page_title)
+        self.assertEqual(page.title, page_title)
+        self.assertTrue(len(Page.objects.all()) == 1)
+
+        # Check context.
+        self.assertQuerysetEqual(response.context['pages'],
+                                 ['<Page: Python.org>'])
+
+
 #######################################################################
 # Helper functions
 
