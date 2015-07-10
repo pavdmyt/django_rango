@@ -11,6 +11,10 @@ from rango.views import get_category_list
 
 class IndexViewTests(TestCase):
 
+    def setUp(self):
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'index'
+
     #
     # Categories
     #
@@ -18,7 +22,7 @@ class IndexViewTests(TestCase):
         """
         If no categories exist, an appropriate msg should be displayed.
         """
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "There are no categories present.")
         self.assertQuerysetEqual(response.context['categories'], [])
@@ -34,7 +38,7 @@ class IndexViewTests(TestCase):
         add_cat('foo bar', 1, 1)
 
         # Test.
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "foo bar")
 
@@ -55,7 +59,7 @@ class IndexViewTests(TestCase):
         add_cat('test7', 1, 7)
 
         # Test.
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context['categories'],
@@ -75,7 +79,7 @@ class IndexViewTests(TestCase):
         """
         If no pages exist, an appropriate msg should be displayed.
         """
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "There are no pages present.")
         self.assertQuerysetEqual(response.context['pages'], [])
@@ -94,7 +98,7 @@ class IndexViewTests(TestCase):
         add_page(cat=cat, name='bar', url=url)
 
         # Test.
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "foo")
 
@@ -121,7 +125,7 @@ class IndexViewTests(TestCase):
         add_page(cat=cat, name='test7', url=url, views=7)
 
         # Test.
-        response = self.client.get(reverse('index'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertQuerysetEqual(
             response.context['pages'],
@@ -142,8 +146,7 @@ class IndexViewTests(TestCase):
         Checks that session data about last visit time and number
         of visits is set up by a view.
         """
-        # response = self.client.get(reverse('index'))
-        self.client.get(reverse('index'))
+        self.client.get(reverse(self.urlpat_name))
         session = self.client.session
 
         self.assertEqual('last_visit' in session, True)
@@ -174,7 +177,7 @@ class IndexViewTests(TestCase):
         self.client.session[settings.SESSION_ENGINE] = store
 
         # Get response.
-        self.client.get(reverse('index'))
+        self.client.get(reverse(self.urlpat_name))
         session = self.client.session
 
         self.assertEqual(session.get('visits'), 2)
@@ -277,13 +280,15 @@ class AddCategoryViewTests(TestCase):
         # Create test user in test DB.
         self.user = User.objects.create_user(username='test_user',
                                              password='1234')
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'add_category'
 
     def test_if_no_auth_redirect_to_login(self):
         """
         Checks that if user is not logged in he is redirected
         to login page.
         """
-        response = self.client.get(reverse('add_category'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 302)
         self.assertTrue('http://testserver/accounts/login/' in response.url)
 
@@ -292,7 +297,7 @@ class AddCategoryViewTests(TestCase):
         Checks that logged in user can access add_category page.
         """
         self.client.login(username='test_user', password='1234')
-        response = self.client.get(reverse('add_category'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Add new Category")
 
@@ -310,7 +315,7 @@ class AddCategoryViewTests(TestCase):
                      'likes': '0'}
 
         # Submit form.
-        response = self.client.post(path=reverse('add_category'),
+        response = self.client.post(path=reverse(self.urlpat_name),
                                     data=form_data)
         self.assertEqual(response.status_code, 200)
 
@@ -329,7 +334,7 @@ class AddCategoryViewTests(TestCase):
                      'likes': '0'}
 
         # Submit form.
-        response = self.client.post(path=reverse('add_category'),
+        response = self.client.post(path=reverse(self.urlpat_name),
                                     data=form_data,
                                     follow=True)
         self.assertEqual(response.status_code, 200)
@@ -351,7 +356,7 @@ class AddCategoryViewTests(TestCase):
                      'likes': '0'}
 
         # Submit form.
-        response = self.client.post(path=reverse('add_category'),
+        response = self.client.post(path=reverse(self.urlpat_name),
                                     data=form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(u'form' not in response.context.keys())
@@ -483,13 +488,15 @@ class UserSettingsViewTests(TestCase):
         # Create test user in test DB.
         self.user = User.objects.create_user(username='test_user',
                                              password='1234')
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'user_settings'
 
     def test_if_no_auth_redirect_to_login(self):
         """
         Checks that if user is not logged in he is redirected
         to login page.
         """
-        response = self.client.get(reverse('user_settings'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 302)
         self.assertTrue('http://testserver/accounts/login/' in response.url)
 
@@ -498,7 +505,7 @@ class UserSettingsViewTests(TestCase):
         Checks that logged in user can access user_settings page.
         """
         self.client.login(username='test_user', password='1234')
-        response = self.client.get(reverse('user_settings'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Change password")
 
@@ -511,7 +518,7 @@ class UserSettingsViewTests(TestCase):
                                       website='http://example.com')
 
         self.client.login(username='test_user', password='1234')
-        response = self.client.get(reverse('user_settings'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
 
         profile = response.context['profile']
@@ -522,7 +529,7 @@ class UserSettingsViewTests(TestCase):
         Checks context if user does not have filled userprofile.
         """
         self.client.login(username='test_user', password='1234')
-        response = self.client.get(reverse('user_settings'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertTrue('profile' not in response.context.keys())
 
@@ -534,13 +541,15 @@ class TrackUrlViewTests(TestCase):
         self.page = add_page(cat=self.cat,
                              name='test page',
                              url='http://testserver/rango/about/')
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'goto'
 
     def test_redirect_if_no_page_id_param(self):
         """
         If no page_id parameter in GET request,
         redirect to index page.
         """
-        response = self.client.get(reverse('goto'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, 'http://testserver/rango/')
 
@@ -549,7 +558,7 @@ class TrackUrlViewTests(TestCase):
         If page_id points to non-existent page in DB,
         redirect to index page.
         """
-        response = self.client.get(path=reverse('goto'),
+        response = self.client.get(path=reverse(self.urlpat_name),
                                    data={'page_id': 42})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, 'http://testserver/rango/')
@@ -559,7 +568,7 @@ class TrackUrlViewTests(TestCase):
         If proper page_id parameter in GET request, redirect to
         appropriate page.
         """
-        response = self.client.get(path=reverse('goto'),
+        response = self.client.get(path=reverse(self.urlpat_name),
                                    data={'page_id': self.page.id})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.page.url)
@@ -570,7 +579,7 @@ class TrackUrlViewTests(TestCase):
         page accessed.
         """
         views = 0
-        response = self.client.get(path=reverse('goto'),
+        response = self.client.get(path=reverse(self.urlpat_name),
                                    data={'page_id': self.page.id})
         self.assertEqual(response.status_code, 302)
 
@@ -605,13 +614,15 @@ class RegisterProfileViewTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='test_user',
                                              password='1234')
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'reg_profile'
 
     def test_if_no_auth_redirect_to_login(self):
         """
         Checks that if user is not logged in he is redirected
         to login page.
         """
-        response = self.client.get(reverse('reg_profile'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 302)
         self.assertTrue('http://testserver/accounts/login/' in response.url)
 
@@ -620,7 +631,7 @@ class RegisterProfileViewTests(TestCase):
         Checks that page is rendered with proper template.
         """
         self.client.login(username='test_user', password='1234')
-        response = self.client.get(reverse('reg_profile'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
 
         base_template = 'base.html'
@@ -634,7 +645,7 @@ class RegisterProfileViewTests(TestCase):
         Checks context if user is logged in (GET request).
         """
         self.client.login(username='test_user', password='1234')
-        response = self.client.get(reverse('reg_profile'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
 
         form = response.context['form']
@@ -652,7 +663,7 @@ class RegisterProfileViewTests(TestCase):
         form_data = {'website': site}
 
         # Submit form.
-        response = self.client.post(path=reverse('reg_profile'),
+        response = self.client.post(path=reverse(self.urlpat_name),
                                     data=form_data)
         self.assertEqual(response.status_code, 302)
 
@@ -675,6 +686,8 @@ class SuggestCategoryViewTests(TestCase):
         add_cat('Spam', 1, 1)
         add_cat('Eggs', 1, 1)
         add_cat('FooBar', 1, 1)
+        # Name attribute from urlpatterns.
+        self.urlpat_name = 'suggest_category'
 
     def test_get_category_list(self):
         """
@@ -708,7 +721,7 @@ class SuggestCategoryViewTests(TestCase):
         """
         Checks that page is rendered with proper template.
         """
-        response = self.client.get(reverse('suggest_category'))
+        response = self.client.get(reverse(self.urlpat_name))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'rango/cats.html')
 
@@ -717,7 +730,7 @@ class SuggestCategoryViewTests(TestCase):
         Checks context when 'suggesion' parameter is given
         in GET request.
         """
-        response = self.client.get(path=reverse('suggest_category'),
+        response = self.client.get(path=reverse(self.urlpat_name),
                                    data={'suggestion': 'Al'})
         self.assertEqual(response.status_code, 200)
         self.assertTrue(len(response.context['cats']), 3)
@@ -727,7 +740,7 @@ class SuggestCategoryViewTests(TestCase):
         Checks context when 'suggesion' parameter is not given
         in GET request.
         """
-        response = self.client.get(path=reverse('suggest_category'),
+        response = self.client.get(path=reverse(self.urlpat_name),
                                    data={'suggestion': ''})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['cats'], [])
