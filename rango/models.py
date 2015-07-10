@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 
@@ -34,6 +35,29 @@ class Page(models.Model):
     # Make these fields optional.
     last_visit = models.DateTimeField('last visit', blank=True, null=True)
     first_visit = models.DateTimeField('first visit', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        now = timezone.now()
+
+        # Ensure visits are not in the future.
+        if self.last_visit:
+            if self.last_visit > now:
+                self.last_visit = None
+                print("***Warning: last_visit > now, field set to 'None'")
+
+        if self.first_visit:
+            if self.first_visit > now:
+                self.first_visit = None
+                print("***Warning: first_visit > now, field set to 'None'")
+
+        # Ensure first_visit < last_visit.
+        if self.first_visit and self.last_visit:
+            if self.first_visit > self.last_visit:
+                self.first_visit = None
+                print(
+                    "***Warning: first_visit > last_visit, field set to 'None'")
+
+        super(Page, self).save(*args, **kwargs)
 
     def __unicode__(self):  # use __str__ in Python 3
         return self.title

@@ -1,8 +1,11 @@
-from datetime import datetime
+import datetime
+from random import randrange
 
 from django.test import TestCase
+from django.utils import timezone
 
 from rango.models import Category, Page
+from rango.tests.test_views import add_cat, add_page
 
 
 class CategoryMethodTests(TestCase):
@@ -29,31 +32,64 @@ class CategoryMethodTests(TestCase):
 
 class PageMethodTests(TestCase):
 
+    def setUp(self):
+        # Populate DB.
+        url = 'http://www.example.com/'
+        self.cat = add_cat('test cat', 1, 1)
+        add_page(self.cat, 'test page1', url)
+        add_page(self.cat, 'test page2', url)
+        add_page(self.cat, 'test page3', url)
+        add_page(self.cat, 'test page4', url)
+        add_page(self.cat, 'test page5', url)
+        add_page(self.cat, 'test page6', url)
+        add_page(self.cat, 'test page7', url)
+        add_page(self.cat, 'test page8', url)
+        add_page(self.cat, 'test page9', url)
+        add_page(self.cat, 'test page10', url)
+
+        # Put first and last visit data to pages.
+        self.pages = Page.objects.all()
+
+        for page in self.pages:
+            add_random_time(page)
+
     def test_visits_are_not_in_the_future(self):
         """
         Checks that the first visit or last visit
         are not in the future.
         """
-        pages = Page.objects.all()
-        now = datetime.now()
+        now = timezone.now()
 
-        for page in pages:
+        # Test.
+        for page in self.pages:
 
             # Check `first_visit`.
             if page.first_visit:
-                self.assertEqual((page.first_visit < now), True)
+                self.assertEqual((page.first_visit <= now), True)
 
             # Check `last_visit`.
             if page.last_visit:
-                self.assertEqual((page.last_visit < now), True)
+                self.assertEqual((page.last_visit <= now), True)
 
     def test_last_visit_is_after_first(self):
         """
         Checks that the last visit equal to or after
         the first visit.
         """
-        pages = Page.objects.exclude(last_visit=None)
+        for page in self.pages:
+            if page.first_visit and page.last_visit:
+                self.assertTrue(page.first_visit <= page.last_visit)
 
-        for page in pages:
-            if page.first_visit:
-                self.assertEqual((page.first_visit <= page.last_visit), True)
+
+#######################################################################
+# Helper functions
+
+def add_random_time(page):
+    """
+    Modifies `page.last_visit` and `page.first_visit` fields
+    with random dates (both past or future).
+    """
+    now = timezone.now()
+    page.first_visit = now + datetime.timedelta(days=randrange(-10, 11, 1))
+    page.last_visit = now + datetime.timedelta(days=randrange(-10, 11, 1))
+    page.save()
