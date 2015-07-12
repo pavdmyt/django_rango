@@ -9,42 +9,29 @@
     <h2>Rango About page</h2>
   </div>
 
-  <div class="text-muted">
-    I'm working on
-    <a href="http://www.tangowithdjango.com/book17/">this</a> tutorial.<br />
-    It shows how to design a web application called <i>Rango</i>.
+  <p>This website is a result of marvelous journey through
+  <a href="http://www.tangowithdjango.com/book17/">How To Tango With Django 1.7</a> book.</p>
 
-    <h4 class="text-info"><b>Design Brief</b></h4>
+  <p>I used Python for approximately 2 years and built some tools to automate certain daily tasks. The problem was that I couldn't provide these tools to my colleagues. Every time I was asked to launch this or that script and send back generated results. I decided to learn Django because it provides powers of platfom-independent web-browser to deliver app functionality to the end users. I tried <i>How To Tango With Django</i> which sufficiently covered my needs. During approx 2 months of working through tutorial I have learned a whole lot of new concepts, ideas, technologies and approaches. I think it's a great place to start learning web development in Python.</p>
 
-    <img src={% static "images/twd200x200.jpg" %} alt="pic" style="width:200px;height:200px">
+  <p>I would like to say <b>Thank You</b> to 
+    <a href="https://github.com/leifos/tango_with_django_book/graphs/contributors">creators and contributors</a>
+    of <i>How To Tango With Django</i> book.
+  </p>
+  <br />
+  <br />
+  <hr>
 
-    <p>
-      Your client would like you to create a website called Rango that lets users browse through user-defined categories to access various web pages. In Spanish, the word rango is used to mean “<i>a league ranked by quality</i>” or “<i>a position in a social hierarchy</i>” (see
-      <a href="https://www.vocabulary.com/dictionary/es/rango">https://www.vocabulary.com/dictionary/es/rango</a>).
-    </p>
+  <p>
+    <a href="http://www.tangowithdjango.com/book17/chapters/overview.html#design-brief"><b>Design Brief</b></a>
+  </p>
 
-    <ul>
-      <li>For the <i>main page</i> of the site, they would like visitors to be able to see:</li>
-        <ul>
-          <li>the 5 most viewed pages;</li>
-          <li>the five most rango’ed categories; and</li>
-          <li>some way for visitors to browse or search through categories.</li>
-        </ul>
-    </ul>
+  <p>
+    <a href="https://github.com/pavdmyt/django_rango"><b>Source code</b></a>
+  </p>
+  <br />
 
-    <ul>
-      <li>When a user views a <i>category page</i>, they would like it to display:</li>
-        <ul>
-          <li>the category name, the number of visits, the number of likes;</li>
-          <li>along with the list of associated pages in that category (showing the page’s title and linking to its url); and.</li>
-          <li>some search functionality (via Bing’s Search API) to find other pages that can be linked to this category.</li>
-        </ul>
-    </ul>
-
-    <ul>
-      <li>For a particular category, the client would like the name of the category to be recorded, the number of times each category page has been visited, and how many users have clicked a “like” button (i.e. the page gets rango’ed, and voted up the social hierarchy).</li>
-      <li>Each category should be accessible via a readable URL - for example, <samp>/rango/books-about-django/</samp>.</li>
-      <li>Only registered users will be able to search and add pages to categories. And so, visitors to the site should be able to register for an account.</li>
-    </ul>
-  </div>
+  <p>If you would like to contact me, please drop a mail to:
+    </b> <i>squawkin@gmail.com</i>
+  </p>
 {% endblock %}
