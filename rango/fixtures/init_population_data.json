@@ -1,0 +1,420 @@
+[
+  {
+    "fields": {
+      "slug": "cool-subreddits",
+      "likes": 0,
+      "name": "Cool subreddits",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "slug": "python-stuff",
+      "likes": 0,
+      "name": "Python stuff",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "slug": "django-tutorials",
+      "likes": 0,
+      "name": "Django tutorials",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "slug": "sdn",
+      "likes": 0,
+      "name": "SDN",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "slug": "nfv",
+      "likes": 0,
+      "name": "NFV",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "slug": "linux",
+      "likes": 0,
+      "name": "Linux",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "slug": "generic-stuff",
+      "likes": 0,
+      "name": "Generic stuff",
+      "views": 0
+    },
+    "model": "rango.category",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "https://www.reddit.com/r/coolgithubprojects/",
+      "title": "Cool GitHub Projects"
+    },
+    "model": "rango.page",
+    "pk": 10
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/Python",
+      "title": "/r/Python"
+    },
+    "model": "rango.page",
+    "pk": 11
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/learnpython",
+      "title": "/r/learnpython"
+    },
+    "model": "rango.page",
+    "pk": 12
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/django",
+      "title": "/r/django"
+    },
+    "model": "rango.page",
+    "pk": 13
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/flask",
+      "title": "/r/flask"
+    },
+    "model": "rango.page",
+    "pk": 14
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/IPython",
+      "title": "/r/IPython"
+    },
+    "model": "rango.page",
+    "pk": 15
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/changemyview/",
+      "title": "/r/changemyview"
+    },
+    "model": "rango.page",
+    "pk": 16
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/ColorizedHistory",
+      "title": "/r/ColorizedHistory"
+    },
+    "model": "rango.page",
+    "pk": 17
+  },
+  {
+    "fields": {
+      "category": 1,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.reddit.com/r/HistoryPorn",
+      "title": "/r/HistoryPorn"
+    },
+    "model": "rango.page",
+    "pk": 18
+  },
+  {
+    "fields": {
+      "category": 2,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.jeffknupp.com/blog/2012/10/04/writing-idiomatic-python/",
+      "title": "Writing Idiomatic Python"
+    },
+    "model": "rango.page",
+    "pk": 19
+  },
+  {
+    "fields": {
+      "category": 2,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://pansop.com/1014/",
+      "title": "Simple & Profound Python Tricks"
+    },
+    "model": "rango.page",
+    "pk": 20
+  },
+  {
+    "fields": {
+      "category": 2,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www-inst.eecs.berkeley.edu/~selfpace/cs9honline/Q2/mutation.html",
+      "title": "Mutation in Python"
+    },
+    "model": "rango.page",
+    "pk": 21
+  },
+  {
+    "fields": {
+      "category": 2,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://shahriar.svbtle.com/underscores-in-python",
+      "title": "Underscores in Python"
+    },
+    "model": "rango.page",
+    "pk": 22
+  },
+  {
+    "fields": {
+      "category": 2,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://se.reddit.com/r/coolgithubprojects/search?q=flair%3A%27python%27&restrict_sr=on&sort=new&t=all#python",
+      "title": "/r/coolgithubprojects (filtered on Python projects)"
+    },
+    "model": "rango.page",
+    "pk": 23
+  },
+  {
+    "fields": {
+      "category": 3,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.tangowithdjango.com/",
+      "title": "Tango With Django | A beginner's guide to web development"
+    },
+    "model": "rango.page",
+    "pk": 24
+  },
+  {
+    "fields": {
+      "category": 3,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "https://docs.djangoproject.com/en/1.8/intro/tutorial01/",
+      "title": "Writing your first Django app"
+    },
+    "model": "rango.page",
+    "pk": 25
+  },
+  {
+    "fields": {
+      "category": 3,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.marinamele.com/taskbuster-django-tutorial",
+      "title": "TaskBuster Django Tutorial"
+    },
+    "model": "rango.page",
+    "pk": 26
+  },
+  {
+    "fields": {
+      "category": 3,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://twoscoopspress.org/",
+      "title": "Two Scoops of Django"
+    },
+    "model": "rango.page",
+    "pk": 27
+  },
+  {
+    "fields": {
+      "category": 4,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://packetlife.net/blog/2013/may/2/what-hell-sdn/",
+      "title": "What the Hell is SDN?"
+    },
+    "model": "rango.page",
+    "pk": 30
+  },
+  {
+    "fields": {
+      "category": 4,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "https://www.opennetworking.org/images/stories/downloads/sdn-resources/white-papers/wp-sdn-newnorm.pdf",
+      "title": "SDN: The New Norm for Networks | ONF White Paper"
+    },
+    "model": "rango.page",
+    "pk": 31
+  },
+  {
+    "fields": {
+      "category": 4,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "https://www.youtube.com/watch?v=2BJyIIIYU8E",
+      "title": "Software Defined Networking Introduction | YouTube"
+    },
+    "model": "rango.page",
+    "pk": 32
+  },
+  {
+    "fields": {
+      "category": 4,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://mininet.org/",
+      "title": "Mininet - An Instant Virtual Network on your Laptop"
+    },
+    "model": "rango.page",
+    "pk": 33
+  },
+  {
+    "fields": {
+      "category": 5,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "https://www.sdxcentral.com/resources/nfv/whats-network-functions-virtualization-nfv/",
+      "title": "What is NFV - Network Functions Virtualization"
+    },
+    "model": "rango.page",
+    "pk": 40
+  },
+  {
+    "fields": {
+      "category": 5,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "https://portal.etsi.org/NFV/NFV_White_Paper.pdf",
+      "title": "Network Functions Virtualization - Intoductory White Paper"
+    },
+    "model": "rango.page",
+    "pk": 41
+  },
+  {
+    "fields": {
+      "category": 6,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.commandlinefu.com/commands/browse/sort-by-votes",
+      "title": "Useful command line tricks"
+    },
+    "model": "rango.page",
+    "pk": 50
+  },
+  {
+    "fields": {
+      "category": 6,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.howtogeek.com/t/linux/",
+      "title": "Linux articles | How-To Geek"
+    },
+    "model": "rango.page",
+    "pk": 51
+  },
+  {
+    "fields": {
+      "category": 6,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.omgubuntu.co.uk/",
+      "title": "OMG! Ubuntu!"
+    },
+    "model": "rango.page",
+    "pk": 52
+  },
+  {
+    "fields": {
+      "category": 7,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://techgenmag.com/2015/03/05/ten-crazily-ambitious-google-projects-that-will-change-the-world/",
+      "title": "Ten crazily ambitious Google projects that will change the world"
+    },
+    "model": "rango.page",
+    "pk": 60
+  },
+  {
+    "fields": {
+      "category": 7,
+      "first_visit": null,
+      "last_visit": null,
+      "views": 0,
+      "url": "http://www.diygenius.com/12-lesser-known-google-projects-that-are-absolutely-amazing/",
+      "title": "12 Lesser-Known Google Projects That Are Absolutely Amazing"
+    },
+    "model": "rango.page",
+    "pk": 61
+  }
+]

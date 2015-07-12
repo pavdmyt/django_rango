@@ -7,6 +7,7 @@ test_script.py
 media/profile_images/
 *.sqlite3
 api_key.txt
+populate_rango.py
 
 # No need to track after:
 # - including django-registration-redux
