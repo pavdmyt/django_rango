@@ -5,7 +5,8 @@ from rango.models import Page, Category, UserProfile
 
 
 class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=128, help_text="Please enter the category name.")
+    name = forms.CharField(max_length=128,
+                           help_text="Please enter the category name.")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     # provides additional information on the form
@@ -19,19 +20,20 @@ class CategoryForm(forms.ModelForm):
 
 
 class PageForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Please enter the title of the page.")
-    url = forms.URLField(max_length=200, help_text="Please enter the URL of the page.")
+    title = forms.CharField(max_length=128,
+                            help_text="Please enter the title of the page.")
+    url = forms.URLField(max_length=200,
+                         help_text="Please enter the URL of the page.")
 
     class Meta:
         # provide an association between the ModelForm and a model
         model = Page
 
         # We don't need every field in the model present.
-        # Some fields may allow NULL values, so we may not want to include them.
         # Here, we are hiding the foreign key.
         # we can either exclude the category field from the form:
         exclude = ('category', 'first_visit', 'last_visit', 'views')
-        # or specify the fields to include (i.e. not include the category field)
+        # or specify the fields to include:
         # fields = ('title', 'url', 'views')
 
 

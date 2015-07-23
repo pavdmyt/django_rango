@@ -53,7 +53,7 @@ def run_query(search_terms, api_key):
     params = {'start':  '1',            # Start (default=1)
               'length': '10',           # Length (default=10; maximum=10)
               'l':      'en',           # Language; en-English (default)
-              'src':    'web',          # Source; web-Web Search 
+              'src':    'web',          # Source; web-Web Search
               'i':      'false',        # Instant search; false - searches for query q
               'f':      'json',         # Result format
               'key':    api_key}

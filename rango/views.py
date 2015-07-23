@@ -2,12 +2,11 @@ from datetime import datetime
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
 from rango.models import Category, Page, UserProfile
-from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from rango.forms import CategoryForm, PageForm, UserProfileForm
 from rango.faroo_search import run_query, API_KEY
 from rango.serializers import CatSerializer, PageSerializer
 
@@ -18,14 +17,10 @@ def index(request):
     context_dict = {}
 
     # Query the database for a list of ALL categories currently stored.
-    # Order the categories by no. likes in descending order.
-    # Retrieve the top 5 only - or all if less than 5.
-    # Place the list in our `context_dict` which will be passed to the template engine.
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict['categories'] = category_list
 
     # Query the DB for a list of pages currently stored
-    # Order the pages by no. of views, retrieve the top 5
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict['pages'] = pages_list
 
@@ -77,7 +72,6 @@ def category(request, category_name_slug):
     try:
         # Can we find a category name slug with the given name?
         # If we can't the `get` method raises a `DoesNotExist exception.
-        # So the `get` method returns one model instance or raises an exception.
         category = Category.objects.get(slug=category_name_slug)
         context_dict['category_name'] = category.name
 
@@ -98,7 +92,7 @@ def category(request, category_name_slug):
 
     except Category.DoesNotExist:
         # we get here if we didn't find the specified category.
-        # don't do anything - the template displays the 'no category' msg for us
+        # don't do anything - the template displays the 'no category' msg.
         pass
 
     return render(request, 'rango/category.html', context_dict)
@@ -119,7 +113,6 @@ def add_category(request):
             # The user will be shown the homepage
             return index(request)
         else:
-            # The supplied form contained errors - just print the to the terminal
             print(form.errors)  # pragma: no cover
     else:
         # If the request was not a POST, display the form to enter details
