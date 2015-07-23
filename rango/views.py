@@ -9,6 +9,9 @@ from django.utils import timezone
 from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.faroo_search import run_query, API_KEY
+from rango.serializers import CatSerializer, PageSerializer
+
+from rest_framework import generics
 
 
 def index(request):
@@ -261,6 +264,22 @@ def auto_add_page(request):
                 context['pages'] = pages
 
     return render(request, 'rango/page_list.html', context)
+
+
+class CategoriesViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows categories to be viewed.
+    """
+    queryset = Category.objects.all()
+    serializer_class = CatSerializer
+
+
+class PagesViewSet(generics.ListAPIView):
+    """
+    API endpoint that allows pages to be viewed.
+    """
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
 
 
 #######################################################################
