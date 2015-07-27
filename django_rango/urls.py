@@ -12,7 +12,8 @@ class MyRegistrationView(RegistrationView):
         return '/rango/add_profile/'
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     # Examples:
     # url(r'^$', 'django_rango.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -26,11 +27,33 @@ urlpatterns = patterns('',
 )
 
 
+# Wire up API.
+urlpatterns += patterns(
+    '',
+    url(r'^api/categories/$',
+        views.CategoriesViewSet.as_view(),
+        name='cat-list'),
+
+    url(r'^api/pages/$',
+        views.PagesViewSet.as_view(),
+        name='page-list'),
+
+    url(r'^api/categories/(?P<cat_id>[\d]+)/$',
+        views.category_details,
+        name='specific-cat'),
+
+    url(r'^api/pages/(?P<page_id>[\d]+)/$',
+        views.page_details,
+        name='specific-page'),
+)
+
+
 # required for media server
 
 if settings.DEBUG:
     urlpatterns += patterns(
         'django.views.static',
         (r'^media/(?P<path>.*)',
-        'serve',
-        {'document_root': settings.MEDIA_ROOT}), )
+         'serve',
+         {'document_root': settings.MEDIA_ROOT}),
+    )

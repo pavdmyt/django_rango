@@ -10,7 +10,9 @@ from rango.forms import CategoryForm, PageForm, UserProfileForm
 from rango.faroo_search import run_query, API_KEY
 from rango.serializers import CatSerializer, PageSerializer
 
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 def index(request):
@@ -267,12 +269,42 @@ class CategoriesViewSet(generics.ListAPIView):
     serializer_class = CatSerializer
 
 
+@api_view(['GET'])
+def category_details(request, cat_id):
+    """
+    API endpoint that allows to view specified category.
+    """
+    try:
+        cat = Category.objects.get(id=cat_id)
+    except Category.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CatSerializer(cat)
+        return Response(serializer.data)
+
+
 class PagesViewSet(generics.ListAPIView):
     """
     API endpoint that allows pages to be viewed.
     """
     queryset = Page.objects.all()
     serializer_class = PageSerializer
+
+
+@api_view(['GET'])
+def page_details(request, page_id):
+    """
+    API endpoint that allows to view specified page.
+    """
+    try:
+        page = Page.objects.get(id=page_id)
+    except Page.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = PageSerializer(page)
+        return Response(serializer.data)
 
 
 #######################################################################

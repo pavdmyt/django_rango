@@ -6,7 +6,7 @@ class CatSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('name', 'views', 'likes')
+        fields = ('id', 'name', 'views', 'likes')
 
 
 class PageSerializer(serializers.ModelSerializer):
@@ -14,4 +14,4 @@ class PageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Page
-        fields = ('category', 'title', 'url', 'views')
+        fields = ('category', 'id', 'title', 'url', 'views')

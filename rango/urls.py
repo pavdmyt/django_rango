@@ -27,15 +27,3 @@ urlpatterns = patterns(
 
     url(r'^auto_add_page/$', views.auto_add_page, name='auto_add_page'),
     )
-
-
-# Wire up API.
-urlpatterns += patterns('',
-                        url(r'^api/categories/$',
-                            views.CategoriesViewSet.as_view(),
-                            name='cat-list'),
-
-                        url(r'^api/pages/$',
-                            views.PagesViewSet.as_view(),
-                            name='page-list'),
-                        )
