@@ -6,6 +6,7 @@ python:
 install:
     - pip install django==1.7
     - pip install django-registration-redux
+    - pip install djangorestframework
     - pip install pillow
     - pip install requests
     - pip install flake8
